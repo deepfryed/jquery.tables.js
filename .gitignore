@@ -1,0 +1,11 @@
+*DS_Store
+*.swp
+._*
+bin/*
+tmp/*
+cache/*
+gems/*
+pids/*
+!*/.keepthis
+vendor/*
+.bundle/config

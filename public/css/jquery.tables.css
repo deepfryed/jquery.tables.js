@@ -1,0 +1,46 @@
+.jqt-wrapper        { min-width: 600px; margin: 0;}
+.jqt-table          { width: 100%; }
+.jqt-table th       { padding: 5px 3px 3px 10px; font-weight: bold; text-align: left; }
+.jqt-table th span  { position: relative; top: -2px; }
+.jqt-table .right   { float: right; }
+
+.jqt-table tr:nth-child(2n+1) { background: #eaeef4; }
+.jqt-table td                 { padding: 5px 5px 5px 10px; font: 90% 'Myriad Pro',arial,sans-serif; color: #333; }
+
+.jqt-control,
+.jqt-table th {
+  text-transform: uppercase;
+  font-family: 'Arial',arial,sans-serif;;
+  font-size: 12px;
+}
+
+.jqt-ipp                  { float: left; padding: 3px; }
+.jqt-control              { padding: 5px; }
+.jqt-control.top .query   { float: right; }
+.jqt-control.top select   { margin: 0 10px; }
+.jqt-control.top input    { border: 1px solid #aaa; padding: 3px; }
+.jqt-control.top .ui-icon { cursor: pointer; }
+.jqt-control.bottom       { padding: 10px 5px; }
+.jqt-control.bottom input { border: 1px solid #aaa; padding: 3px; }
+
+.jqt-control.bottom .ui-button {
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.jqt-info {
+  float: left;
+  margin-top: 6px;
+  text-transform: none;
+}
+
+.jqt-pagination {
+  float: right;
+}
+
+/* avoids selecting th with shift-click */
+.jqt-table th, .jqt-table tr, .jqt-control {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select:none;
+}

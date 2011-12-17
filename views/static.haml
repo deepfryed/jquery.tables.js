@@ -1,0 +1,9 @@
+%table#test{data: {filtered: 62, total: 93}}
+  != haml :_thead
+  %tbody
+    - ROWS.each do |id, name, age, added|
+      %tr
+        %td= id
+        %td= name
+        %td= age
+        %td= added

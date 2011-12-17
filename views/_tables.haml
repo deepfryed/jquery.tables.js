@@ -1,0 +1,10 @@
+%div{data: {total: 93, filtered: @filtered.size}}
+  %table
+    - @data.each do |id, name, age, date|
+      %tr
+        %td= id
+        %td
+          %img{src: PICS[id % 3], height: '50px'}
+          = name
+        %td= age
+        %td= date.strftime('%a, %d %b %Y %T %Z')
