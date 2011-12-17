@@ -30,7 +30,7 @@
         </script>
       </head>
       <body>
-        <table id='test'>
+        <table id='test' data-url='/table-data.json'>
           <thead>
             <tr>
               <th data-type='numeric'>id</th>
@@ -41,7 +41,7 @@
           </thead>
           <tbody>
           </tbody>
-        </table
+        </table>
       </body>
     </html>
 ```
