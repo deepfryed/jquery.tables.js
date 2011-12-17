@@ -144,6 +144,7 @@
     this.load = function() {
       // preload buffer only the first time around.
       this.buffer = this.buffer || $('<tbody/>').append(table.find('tbody').html());
+      this.total = this.filtered = this.buffer.find('tr').size();
       table.find('tbody').html('');
       this.draw();
     };
