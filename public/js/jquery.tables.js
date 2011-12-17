@@ -84,7 +84,7 @@
         instance.redraw();
       });
 
-      var input = $('<input/>', {"name": "q"});
+      var input = $('<input/>', {"name": "q", "placeholder": "Type query and hit return"});
 
       input.keydown(function(e) {
         instance.query = input.val() == '' ? null : input.val();
