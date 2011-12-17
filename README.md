@@ -1,17 +1,69 @@
-= Table plugin for JQuery
+# Table plugin for JQuery
 
-https://github.com/deepfryed/jquery.tables/raw/master/public/art/jquery.tables.png
+![The Front End](https://github.com/deepfryed/jquery.tables/raw/master/public/art/jquery.tables.png)
+
+
+## Features
 
 * handles both static html tables and dynamic content in json or html formats.
 * check example ruby app for more details.
 
-== Example
+## Example
 
+### JSON or HTML via XHR
+
+``` html
     <!DOCTYPE html>
     <html lang='en-us' xml:lang='en-us' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
         <link href='/css/jquery-ui.css' media='screen' rel='stylesheet' type='text/css'>
         <link href='/css/jquery.tables.css' media='screen' rel='stylesheet' type='text/css'>
+        <script src='/js/jquery.min.js' type='text/javascript'></script>
+        <script src='/js/jquery.tables.js' type='text/javascript'></script>
+        <script>
+          //<![CDATA[
+            $(document).ready(function() {
+              $('#test').bind('jqt-draw-done', function() { if (console) console.log('done rendering');});
+              $('#test').tables();
+            });
+          //]]>
+        </script>
+      </head>
+      <body>
+        <table id='test'>
+          <thead>
+            <tr>
+              <th data-type='numeric'>id</th>
+              <th>name</th>
+              <th data-type='numeric'>age</th>
+              <th>added</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table
+      </body>
+    </html>
+```
+
+### Static HTML
+
+``` html
+    <!DOCTYPE html>
+    <html lang='en-us' xml:lang='en-us' xmlns='http://www.w3.org/1999/xhtml'>
+      <head>
+        <link href='/css/jquery-ui.css' media='screen' rel='stylesheet' type='text/css'>
+        <link href='/css/jquery.tables.css' media='screen' rel='stylesheet' type='text/css'>
+        <script src='/js/jquery.min.js' type='text/javascript'></script>
+        <script src='/js/jquery.tables.js' type='text/javascript'></script>
+        <script>
+          //<![CDATA[
+            $(document).ready(function() {
+              $('#test').bind('jqt-draw-done', function() { if (console) console.log('done rendering');});
+              $('#test').tables();
+            });
+          //]]>
+        </script>
       </head>
       <body>
         <table id='test'>
@@ -92,15 +144,6 @@ https://github.com/deepfryed/jquery.tables/raw/master/public/art/jquery.tables.p
             </tr>
           </tbody>
         </table>
-        <script src='/js/jquery.min.js' type='text/javascript'></script>
-        <script src='/js/jquery.tables.js' type='text/javascript'></script>
-        <script>
-          //<![CDATA[
-            $(document).ready(function() {
-              $('#test').bind('jqt-draw-done', function() { if (console) console.log('done rendering');});
-              $('#test').tables();
-            });
-          //]]>
-        </script>
       </body>
     </html>
+```
