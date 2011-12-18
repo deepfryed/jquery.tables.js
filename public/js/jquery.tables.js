@@ -1,3 +1,12 @@
+/*
+Version: 0.1.0
+
+Code: https://github.com/deepfryed/jquery.tables
+License: Creative Commons Attribution - CC BY, http://creativecommons.org/licenses/by/3.0
+
+Copyright (C) 2011 Bharanee Rathna
+*/
+
 (function ($) {
   var JQueryTables = function(el, options) {
     var table    = $(el);
