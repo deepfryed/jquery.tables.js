@@ -38,12 +38,22 @@ Copyright (C) 2011 Bharanee Rathna
 
     this.add_sort_controls = function() {
       table.find('thead th').each(function(idx, th) {
+        $(th).addClass('ui-state-default');
+
+        if ($(th).attr('data-nosort')) return true;
+
         var span = $('<span/>', {"class": "ui-icon right " + icons[0]});
         $(th).append(span);
-        $(th).addClass('ui-state-default');
         $(th).click(function(e) {
           var dir = $(th).data('sort-dir');
           dir = dir ? dir % 3 + 1 : 2;
+
+          // toggle betweeb ascending & descending by default.
+          /*
+          if (!e.shiftKey && dir == 1)
+            dir = 2;
+          */
+
           $(th).data('sort-dir', dir);
 
           instance.add_sort_field(e, idx, dir);
@@ -171,7 +181,8 @@ Copyright (C) 2011 Bharanee Rathna
       var offset  = this.page * this.limit;
       var toolbar = table.next('.jqt-control.bottom');
       var pagen   = Math.min(offset + this.limit, this.filtered);
-      var text    = 'Showing ' + (offset + 1) + ' to ' + pagen + ' of ' + this.filtered;
+      var page    = this.filtered > 0 ? offset + 1 : 0;
+      var text    = 'Showing ' + page + ' to ' + pagen + ' of ' + this.filtered;
 
       toolbar.find('.jqt-info').remove();
       toolbar.prepend($('<div/>', {"class": "jqt-info"}).append(text));
@@ -203,7 +214,7 @@ Copyright (C) 2011 Bharanee Rathna
           instance.redraw();
         });
 
-        input = $('<input/>', {"size": 3, "placeholder": "page"});
+        input = $('<input/>', {"size": ('' + instance.pages).length + 2, "placeholder": "page"});
         input.keydown(function(e) {
           if (e.keyCode == 13) {
             var page = parseInt($(this).val());
@@ -241,7 +252,7 @@ Copyright (C) 2011 Bharanee Rathna
         last.addClass('ui-state-disabled');
       }
 
-      toolbar.find('input').val((instance.page + 1) + ' / ' + instance.pages);
+      toolbar.find('input').val((instance.pages > 0 ? instance.page + 1 : 0) + ' / ' + instance.pages);
 
     };
 
@@ -302,15 +313,19 @@ Copyright (C) 2011 Bharanee Rathna
   };
 
   $.fn.tables = function(options) {
-    var key   = 'jquery.tables';
-    var table = $(this).data(key);
-    if (!table) {
-      table = new JQueryTables(this, options);
-      $(this).data(key, table);
-      table.init();
-    }
+    var tables = [];
+    var key    = 'jquery.tables';
+    $(this).each(function(idx, el) {
+      var table = $(el).data(key);
+      if (!table) {
+        table = new JQueryTables(this, options);
+        $(el).data(key, table);
+        table.init();
+      }
+      tables.push(table);
+    });
 
-    return table;
+    return tables.length > 1 ? tables : tables[0];
   };
 
 })(jQuery);
