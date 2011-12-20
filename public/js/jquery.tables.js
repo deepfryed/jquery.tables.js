@@ -37,6 +37,8 @@ Copyright (C) 2011 Bharanee Rathna
     };
 
     this.add_sort_controls = function() {
+      this.colspan = table.find('thead th').size();
+
       table.find('thead th').each(function(idx, th) {
         $(th).addClass('ui-state-default');
 
@@ -125,10 +127,12 @@ Copyright (C) 2011 Bharanee Rathna
 
     // TODO: i18n
     this.fetch_error = function(m) {
-      alert('error loading data');
+      table.trigger('jqt-fetch-error');
+      table.find('tbody div.jqt-overlay center').text('ERROR LOADING DATA');
     };
 
     this.fetch_buffer = function(data, textStatus, jqXHR) {
+      table.find('tbody div.jqt-overlay').remove();
       if (typeof(data) == 'string') {
         var $div          = $(data);
         instance.total    = $div.attr('data-total'),
@@ -146,8 +150,29 @@ Copyright (C) 2011 Bharanee Rathna
       instance.draw();
     };
 
+    this.display_loading_overlay = function() {
+      // remove any previous overlays
+      table.find('tbody div.jqt-overlay').remove();
+
+      var message = '<center> LOADING DATA ... </center>';
+      var tbody   = table.find('tbody');
+
+      if (table.find('tbody tr').size() < 1) {
+        console.log('here...');
+        tbody.html('<tr><td colspan="' + this.colspan + '">' + message + '</td></tr>');
+      }
+      else {
+        var divstyle  = {"z-index": 1, position: 'absolute', height: tbody.innerHeight(), width: tbody.innerWidth()};
+        var textstyle = {margin: '25% 0', "font-family": 'Arial'};
+        tbody.prepend($('<div/>', {"class": "jqt-overlay"}).append($(message).css(textstyle)).css(divstyle));
+      }
+    };
+
     this.fetch = function() {
       var data = {offset: this.page * this.limit, limit: this.limit};
+
+      this.display_loading_overlay();
+      this.update_pagination();
 
       if (this.sort_fields.length > 0) {
         data['sf'] = $.map(this.sort_fields, function(arr) { return arr[0]; });
