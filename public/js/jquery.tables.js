@@ -25,6 +25,9 @@ Copyright (C) 2011 Bharanee Rathna
 
     this.init = function() {
       table.wrap($('<div/>', {"class": "jqt-wrapper", "style": "display: inline-block"})).addClass('jqt-table');
+      table.attr('cellpadding', 0);
+      table.attr('cellspacing', 0);
+
       this.add_controls();
       this.add_sort_controls();
       $.each(table.find('thead th'), function(idx, th) {
@@ -158,7 +161,6 @@ Copyright (C) 2011 Bharanee Rathna
       var tbody   = table.find('tbody');
 
       if (table.find('tbody tr').size() < 1) {
-        console.log('here...');
         tbody.html('<tr><td colspan="' + this.colspan + '">' + message + '</td></tr>');
       }
       else {
@@ -212,13 +214,14 @@ Copyright (C) 2011 Bharanee Rathna
       toolbar.find('.jqt-info').remove();
       toolbar.prepend($('<div/>', {"class": "jqt-info"}).append(text));
 
-      var tbdiv, first, prev, next, last;
+      var tbdiv, first, prev, next, last, input;
 
       if (toolbar.find('.jqt-pagination').size() > 0) {
         first = toolbar.find('.jqt-first');
         prev  = toolbar.find('.jqt-previous');
         next  = toolbar.find('.jqt-next');
         last  = toolbar.find('.jqt-last');
+        input = toolbar.find('input');
       }
       else {
         tbdiv = $('<div/>',  {"class": "jqt-pagination"});
@@ -239,7 +242,7 @@ Copyright (C) 2011 Bharanee Rathna
           instance.redraw();
         });
 
-        input = $('<input/>', {"size": ('' + instance.pages).length + 2, "placeholder": "page"});
+        input = $('<input/>', {placeholder: 'page', style: "font-family:monospace; font-size: 1em;"});
         input.keydown(function(e) {
           if (e.keyCode == 13) {
             var page = parseInt($(this).val());
@@ -277,8 +280,8 @@ Copyright (C) 2011 Bharanee Rathna
         last.addClass('ui-state-disabled');
       }
 
-      toolbar.find('input').val((instance.pages > 0 ? instance.page + 1 : 0) + ' / ' + instance.pages);
-
+      var pagination_index = (instance.pages > 0 ? instance.page + 1 : 0) + ' / ' + instance.pages;
+      input.attr({size: pagination_index.length - 1}).val(pagination_index);
     };
 
     this.filter = function() {
