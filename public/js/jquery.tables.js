@@ -37,6 +37,9 @@ Copyright (C) 2011 Bharanee Rathna
           settings.sorters[idx] = settings.sorters[idx] || instance.strcmp;
       });
       this.redraw();
+
+      // in case ppl wanna hide it until it's initialized.
+      table.show();
     };
 
     this.add_sort_controls = function() {
