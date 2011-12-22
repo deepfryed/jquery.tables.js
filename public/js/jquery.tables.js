@@ -1,5 +1,5 @@
 /*
-Version: 0.1.0
+Version: 0.2.0
 
 Code: https://github.com/deepfryed/jquery.tables
 License: Creative Commons Attribution - CC BY, http://creativecommons.org/licenses/by/3.0
@@ -14,6 +14,48 @@ Copyright (C) 2011 Bharanee Rathna
     var settings = options || {};
     var icons    = {0: "ui-icon-carat-2-n-s", 1: "ui-icon-triangle-1-n", 2: "ui-icon-triangle-1-s"};
 
+    // ordered hash, too bad js doesn't have a built-in.
+    var OrderedHash = function() {
+      var instance = this;
+
+      this.hash = {};
+      this.list = [];
+
+      this.find = function(key) {
+        return instance.hash[key];
+      };
+
+      this.insert = function(key, value) {
+        if (instance.list.indexOf(key) == -1)
+          instance.list.push(key);
+        instance.hash[key] = value;
+      };
+
+      this.delete = function(key) {
+        var index = instance.list.indexOf(key);
+        if (index)
+          instance.list.splice(index, 1);
+        delete instance.hash[index];
+      };
+
+      this.size = function() {
+        return instance.list.length;
+      };
+
+      this.clear = function() {
+        instance.hash = {};
+        instance.list = [];
+      };
+
+      this.values = function() {
+        return $.map(instance.list, function(key) { return instance.hash[key]; });
+      };
+
+      this.keys = function() {
+        return instance.list;
+      };
+    };
+
     // pagination & sorting
     settings.items_per_page = settings.items_per_page || [10, 20, 50, 100];
     settings.sorters        = settings.sorters        || {};
@@ -21,7 +63,7 @@ Copyright (C) 2011 Bharanee Rathna
 
     this.page = 0, this.total = 0, this.filtered = 0, this.pages = 0, this.buffer;
     this.limit = settings.items_per_page[0] || table.attr('data-tables-items-per-page');
-    this.sort_fields = [];
+    this.ordering = new OrderedHash();
 
     this.init = function() {
       table.wrap($('<div/>', {"class": "jqt-wrapper", "style": "display: inline-block"})).addClass('jqt-table');
@@ -81,13 +123,14 @@ Copyright (C) 2011 Bharanee Rathna
           $(el).addClass(icons[0]);
         });
 
-        this.sort_fields = [];
+        this.ordering.clear();
+        this.ordering.insert(idx, dir);
       }
 
       if (dir > 1)
-        this.sort_fields.push([idx, dir]);
+        this.ordering.insert(idx, dir);
       else
-        this.sort_fields = $.grep(this.sort_fields, function(arr) { return arr[0] != idx; });
+        this.ordering.delete(idx);
     };
 
     this.add_controls = function() {
@@ -179,9 +222,9 @@ Copyright (C) 2011 Bharanee Rathna
       this.display_loading_overlay();
       this.update_pagination();
 
-      if (this.sort_fields.length > 0) {
-        data['sf'] = $.map(this.sort_fields, function(arr) { return arr[0]; });
-        data['sd'] = $.map(this.sort_fields, function(arr) { return arr[1]; });
+      if (this.ordering.size() > 0) {
+        data['sf'] = this.ordering.keys();
+        data['sd'] = this.ordering.values();
       }
 
       if (this.query)
@@ -202,7 +245,7 @@ Copyright (C) 2011 Bharanee Rathna
       var rows = this.filter();
       this.filtered = settings.url ? this.filtered : this.query ? rows.size() : this.buffer.find('tr').size();
       this.pages = Math.ceil(this.filtered / this.limit);
-      table.find('tbody').html(this.order(rows).clone());
+      table.find('tbody').html(this.sort(rows).clone());
       this.update_pagination();
       table.trigger('jqt-draw-done');
     };
@@ -313,13 +356,11 @@ Copyright (C) 2011 Bharanee Rathna
       return $($(tr).find('td')[idx]).text();
     };
 
-    this.build_sorter = function(fields) {
+    this.build_sort_function = function() {
       return function(tr1, tr2) {
-        var cmp = 0;
-        var multipliers = {1: 0, 2: 1, 3: -1};
-        $.each(fields, function(idx, arr) {
-          var f = arr[0], dir = multipliers[arr[1]];
-          var text1 = instance.getcolumn(tr1, f), text2 = instance.getcolumn(tr2, f);
+        var cmp = 0, hash = instance.ordering, multipliers = {1: 0, 2: 1, 3: -1};
+        $.each(hash.keys(), function(idx, f) {
+          var dir  = multipliers[hash.find(f)], text1 = instance.getcolumn(tr1, f), text2 = instance.getcolumn(tr2, f);
           cmp = dir * (settings.sorters[f])(text1, text2);
           if (cmp != 0) return false;
         });
@@ -328,12 +369,12 @@ Copyright (C) 2011 Bharanee Rathna
       };
     };
 
-    this.order = function(res) {
+    this.sort = function(res) {
       var offset = this.page * this.limit;
-      var sorter = this.build_sorter(this.sort_fields);
+      var sorter = this.build_sort_function();
       return settings.url ?
         res :
-        this.sort_fields.length > 0 ?
+        this.ordering.size() > 0 ?
           res.sort(sorter).slice(offset, offset + this.limit) :
           res.slice(offset, offset + this.limit);
     };
