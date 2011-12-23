@@ -12,13 +12,20 @@
   text-transform: uppercase;
   font-family: 'Arial',arial,sans-serif;;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .jqt-ipp                  { float: left; padding: 3px; }
 .jqt-control              { padding: 5px; }
 .jqt-control.top .query   { float: right; }
 .jqt-control.top select   { margin: 0 10px; }
-.jqt-control.top input    { border: 1px solid #aaa; padding: 3px; }
+.jqt-control.top input    {
+  background-image: url(/art/magnifier.png);
+  background-position: 3px 3px;
+  background-repeat: no-repeat;
+  border: 1px solid #aaa;
+  padding: 3px 3px 3px 22px;
+}
 .jqt-control.top .ui-icon { cursor: pointer; }
 .jqt-control.bottom       { padding: 10px 5px; }
 .jqt-control.bottom input { border: 1px solid #aaa; padding: 3px; }

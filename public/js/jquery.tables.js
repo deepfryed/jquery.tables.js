@@ -154,7 +154,7 @@ Copyright (C) 2011 Bharanee Rathna
         instance.redraw();
       });
 
-      var input = $('<input/>', {"name": "q", "placeholder": "Type query and hit return"});
+      var input = $('<input/>', {"name": "q"});
 
       input.keydown(function(e) {
         instance.query = input.val() == '' ? null : input.val();
