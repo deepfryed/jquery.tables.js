@@ -8,6 +8,84 @@ Copyright (C) 2011 Bharanee Rathna
 */
 
 (function ($) {
+  /** JQueryTables
+
+    A simple table plugin for jquery that supports static html and dynamic content retrieved via
+    xhr requests.
+
+    EXAMPLE
+    =======
+      <table id="mytable" data-url="/table-data">
+        <thead>
+          <tr>
+            <th data-type="numeric">id</th>
+            <th>name</th>
+          </tr>
+        </thead>
+      </table>
+
+      <script src='/js/jquery.tables.js' type='text/javascript'></script>
+      <script type='text/javascript'>
+        $(function() {
+          $('#mytable').tables();
+        });
+      </script>
+
+    OPTIONS (with defaults)
+    =======================
+
+      url: null                           // remote url to fetch data, also respects the data-url attribute for TABLE
+      items_per_page: [10, 20, 50, 100]   // display items per page
+      sorters: null                       // sort comparison function for custom data types.
+                                          //   1. you can provide a data-type attribute in TH for each column.
+                                          //   2. by default, jquery.tables.js supports string and numeric types.
+                                          //   3. to skip sorting for a column, just add a data-nosort="1" attribute to TH
+      i8n:
+        display: 'Display'
+        first:    'first'
+        previous: 'previous'
+        next:     'next'
+        last:     'last'
+        pageinfo: 'Showing {s} to {e} of {t}'
+        loading:  'LOADING DATA ...'
+        error:    'ERROR LOADING DATA'
+
+
+    XHR REQUESTS
+    ============
+
+      XHR/AJAX requests can return either a JSON or HTML response.
+
+      JSON
+      ----
+
+        This needs to have 3 values: total, filtered and rows.
+        e.g.
+          {total: 92, filtered: 2, rows: [["1", "abby"], ["2", "sam"]]}
+
+
+      HTML
+      ----
+
+        This needs a properly formatted HTML TABLE with the results inside a TBODY element. The total and filtered
+        data should be included as attributes for the TABLE.
+
+        e.g.
+
+        <table data-total="92" data-filtered="2">
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>abby</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>sam</td>
+            </tr>
+          </tbody>
+        </table>
+  */
+
   var JQueryTables = function(el, options) {
     var table    = $(el);
     var instance = this;
@@ -73,7 +151,7 @@ Copyright (C) 2011 Bharanee Rathna
     settings.url            = settings.url            || table.attr('data-url');
     settings.i8n            = jQuery.extend(true, settings.i8n || {}, i8n);
 
-    this.page = 0, this.total = 0, this.filtered = 0, this.pages = 0, this.buffer;
+    this.page = 0, this.total = 0, this.filtered = 0, this.pages = 0, this.buffer, this.types = [];
     this.limit = settings.items_per_page[0] || table.attr('data-tables-items-per-page');
     this.ordering = new OrderedHash();
 
@@ -84,15 +162,13 @@ Copyright (C) 2011 Bharanee Rathna
 
       this.add_controls();
       this.add_sort_controls();
-      $.each(table.find('thead th'), function(idx, th) {
-        if ($(th).attr('data-type') == 'numeric')
-          settings.sorters[idx] = instance.floatcmp;
-        else
-          settings.sorters[idx] = settings.sorters[idx] || instance.strcmp;
-      });
-      this.redraw();
 
-      // in case ppl wanna hide it until it's initialized.
+      // initialize comparison functions & types
+      settings.sorters.string = this.strcmp;
+      settings.sorters.numeric = this.floatcmp;
+      $.each(table.find('thead th'), function(idx, th) { instance.types[idx] = $(th).attr('data-type') || 'string'; });
+
+      this.redraw();
       table.show();
     };
 
@@ -373,7 +449,7 @@ Copyright (C) 2011 Bharanee Rathna
         var cmp = 0, hash = instance.ordering, multipliers = {1: 0, 2: 1, 3: -1};
         $.each(hash.keys(), function(idx, f) {
           var dir  = multipliers[hash.find(f)], text1 = instance.getcolumn(tr1, f), text2 = instance.getcolumn(tr2, f);
-          cmp = dir * (settings.sorters[f])(text1, text2);
+          cmp = dir * (settings.sorters[instance.types[f]])(text1, text2);
           if (cmp != 0) return false;
         });
 
