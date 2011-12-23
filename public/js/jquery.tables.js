@@ -271,10 +271,10 @@ Copyright (C) 2011 Bharanee Rathna
       }
       else {
         tbdiv = $('<div/>',  {"class": "jqt-pagination"});
-        first = $('<span/>', {"class": "jqt-first ui-button ui-state-default", "html": "first"});
-        prev  = $('<span/>', {"class": "jqt-previous ui-button ui-state-default", "html": "previous"});
-        next  = $('<span/>', {"class": "jqt-next ui-button ui-state-default", "html": "next"});
-        last  = $('<span/>', {"class": "jqt-last ui-button ui-state-default", "html": "last"});
+        first = $('<span/>', {"class": "jqt-first ui-button ui-state-active", "html": "first"});
+        prev  = $('<span/>', {"class": "jqt-previous ui-button ui-state-active", "html": "previous"});
+        next  = $('<span/>', {"class": "jqt-next ui-button ui-state-active", "html": "next"});
+        last  = $('<span/>', {"class": "jqt-last ui-button ui-state-active", "html": "last"});
 
         first.click(function() {
           if ($(this).is('.ui-state-disabled')) return;

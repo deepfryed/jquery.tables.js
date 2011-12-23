@@ -24,6 +24,8 @@
 .jqt-control.bottom input { border: 1px solid #aaa; padding: 3px; }
 
 .jqt-control.bottom .ui-button {
+  font-size: 0.9em;
+  padding: 4px;
   display: inline-block;
   margin: 0 2px;
 }
