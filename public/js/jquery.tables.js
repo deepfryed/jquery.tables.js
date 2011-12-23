@@ -33,9 +33,9 @@ Copyright (C) 2011 Bharanee Rathna
 
       this.delete = function(key) {
         var index = instance.list.indexOf(key);
-        if (index)
+        if (index >= 0)
           instance.list.splice(index, 1);
-        delete instance.hash[index];
+        delete instance.hash[key];
       };
 
       this.size = function() {
