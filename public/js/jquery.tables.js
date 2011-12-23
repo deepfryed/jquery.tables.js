@@ -56,10 +56,22 @@ Copyright (C) 2011 Bharanee Rathna
       };
     };
 
+    var i8n = {
+      display: 'Display',
+      first:    'first',
+      previous: 'previous',
+      next:     'next',
+      last:     'last',
+      pageinfo: 'Showing {s} to {e} of {t}',
+      loading:  'LOADING DATA ...',
+      error:    'ERROR LOADING DATA'
+    };
+
     // pagination & sorting
     settings.items_per_page = settings.items_per_page || [10, 20, 50, 100];
     settings.sorters        = settings.sorters        || {};
     settings.url            = settings.url            || table.attr('data-url');
+    settings.i8n            = jQuery.extend(true, settings.i8n || {}, i8n);
 
     this.page = 0, this.total = 0, this.filtered = 0, this.pages = 0, this.buffer;
     this.limit = settings.items_per_page[0] || table.attr('data-tables-items-per-page');
@@ -166,7 +178,7 @@ Copyright (C) 2011 Bharanee Rathna
 
       var search = $('<div/>', {"class": "query"}).append(input);
 
-      return div.append(ipp.append('display').append(select).append('items')).append(search);
+      return div.append(ipp.append(settings.i8n.display).append(select)).append(search);
     };
 
     this.bottom_controls = function() {
@@ -177,7 +189,7 @@ Copyright (C) 2011 Bharanee Rathna
     // TODO: i18n
     this.fetch_error = function(m) {
       table.trigger('jqt-fetch-error');
-      table.find('tbody div.jqt-overlay center').text('ERROR LOADING DATA');
+      table.find('tbody div.jqt-overlay center').text(settings.i8n.error);
     };
 
     this.fetch_buffer = function(data, textStatus, jqXHR) {
@@ -203,7 +215,7 @@ Copyright (C) 2011 Bharanee Rathna
       // remove any previous overlays
       table.find('tbody div.jqt-overlay').remove();
 
-      var message = '<center> LOADING DATA ... </center>';
+      var message = '<center>' + settings.i8n.loading + '</center>';
       var tbody   = table.find('tbody');
 
       if (table.find('tbody tr').size() < 1) {
@@ -255,7 +267,7 @@ Copyright (C) 2011 Bharanee Rathna
       var toolbar = table.next('.jqt-control.bottom');
       var pagen   = Math.min(offset + this.limit, this.filtered);
       var page    = this.filtered > 0 ? offset + 1 : 0;
-      var text    = 'Showing ' + page + ' to ' + pagen + ' of ' + this.filtered;
+      var text    = settings.i8n.pageinfo.replace('{s}', page).replace('{e}', pagen).replace('{t}', this.filtered);
 
       toolbar.find('.jqt-info').remove();
       toolbar.prepend($('<div/>', {"class": "jqt-info"}).append(text));
@@ -271,10 +283,10 @@ Copyright (C) 2011 Bharanee Rathna
       }
       else {
         tbdiv = $('<div/>',  {"class": "jqt-pagination"});
-        first = $('<span/>', {"class": "jqt-first ui-button ui-state-active", "html": "first"});
-        prev  = $('<span/>', {"class": "jqt-previous ui-button ui-state-active", "html": "previous"});
-        next  = $('<span/>', {"class": "jqt-next ui-button ui-state-active", "html": "next"});
-        last  = $('<span/>', {"class": "jqt-last ui-button ui-state-active", "html": "last"});
+        first = $('<span/>', {"class": "jqt-first ui-button ui-state-active", "html": settings.i8n.first});
+        prev  = $('<span/>', {"class": "jqt-previous ui-button ui-state-active", "html": settings.i8n.previous});
+        next  = $('<span/>', {"class": "jqt-next ui-button ui-state-active", "html": settings.i8n.next});
+        last  = $('<span/>', {"class": "jqt-last ui-button ui-state-active", "html": settings.i8n.last});
 
         first.click(function() {
           if ($(this).is('.ui-state-disabled')) return;
