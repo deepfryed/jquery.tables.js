@@ -1,149 +1,92 @@
-# Table plugin for JQuery
+# Yet another JQuery table plugin
 
-![The Front End](https://github.com/deepfryed/jquery.tables/raw/master/public/art/jquery.tables.png)
+![The Front End](https://github.com/deepfryed/jquery.tables.js/raw/master/public/art/jquery.tables.png)
 
-
-## Features
-
-* handles both static html tables and dynamic content in json or html formats.
-* check example ruby app for more details.
 
 ## Example
 
-### JSON or HTML via XHR
+```html
+  <table id="mytable" data-url="/table-data">
+    <thead>
+      <tr>
+        <th data-type="numeric">id</th>
+        <th>name</th>
+      </tr>
+    </thead>
+  </table>
 
-``` html
-    <!DOCTYPE html>
-    <html lang='en-us' xml:lang='en-us' xmlns='http://www.w3.org/1999/xhtml'>
-      <head>
-        <link href='/css/jquery-ui.css' media='screen' rel='stylesheet' type='text/css'>
-        <link href='/css/jquery.tables.css' media='screen' rel='stylesheet' type='text/css'>
-        <script src='/js/jquery.min.js' type='text/javascript'></script>
-        <script src='/js/jquery.tables.js' type='text/javascript'></script>
-        <script>
-          //<![CDATA[
-            $(document).ready(function() {
-              $('#test').bind('jqt-draw-done', function() { if (console) console.log('done rendering');});
-              $('#test').tables();
-            });
-          //]]>
-        </script>
-      </head>
-      <body>
-        <table id='test' data-url='/table-data.json'>
-          <thead>
-            <tr>
-              <th data-type='numeric'>id</th>
-              <th>name</th>
-              <th data-type='numeric'>age</th>
-              <th>added</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </body>
-    </html>
+  <script src='/js/jquery.tables.js' type='text/javascript'></script>
+  <script type='text/javascript'>
+    $(function() {
+      $('#mytable').tables();
+    });
+  </script>
 ```
 
-### Static HTML
+## Options (with defaults)
 
-``` html
-    <!DOCTYPE html>
-    <html lang='en-us' xml:lang='en-us' xmlns='http://www.w3.org/1999/xhtml'>
-      <head>
-        <link href='/css/jquery-ui.css' media='screen' rel='stylesheet' type='text/css'>
-        <link href='/css/jquery.tables.css' media='screen' rel='stylesheet' type='text/css'>
-        <script src='/js/jquery.min.js' type='text/javascript'></script>
-        <script src='/js/jquery.tables.js' type='text/javascript'></script>
-        <script>
-          //<![CDATA[
-            $(document).ready(function() {
-              $('#test').bind('jqt-draw-done', function() { if (console) console.log('done rendering');});
-              $('#test').tables();
-            });
-          //]]>
-        </script>
-      </head>
-      <body>
-        <table id='test'>
-          <thead>
-            <tr>
-              <th data-type='numeric'>id</th>
-              <th>name</th>
-              <th data-type='numeric'>age</th>
-              <th>added</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0</td>
-              <td>kevin 0</td>
-              <td>30</td>
-              <td>2011-12-17 18:03:08 +1100</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>david 1</td>
-              <td>38</td>
-              <td>2011-12-17 18:03:09 +1100</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>claudia 2</td>
-              <td>35</td>
-              <td>2011-12-17 18:03:10 +1100</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>kevin 3</td>
-              <td>39</td>
-              <td>2011-12-17 18:03:11 +1100</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>david 4</td>
-              <td>37</td>
-              <td>2011-12-17 18:03:12 +1100</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>david 5</td>
-              <td>21</td>
-              <td>2011-12-17 18:03:13 +1100</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>david 6</td>
-              <td>21</td>
-              <td>2011-12-17 18:03:14 +1100</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>david 7</td>
-              <td>27</td>
-              <td>2011-12-17 18:03:15 +1100</td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td>david 8</td>
-              <td>40</td>
-              <td>2011-12-17 18:03:16 +1100</td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td>sam 9</td>
-              <td>21</td>
-              <td>2011-12-17 18:03:17 +1100</td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td>david 10</td>
-              <td>17</td>
-              <td>2011-12-17 18:03:18 +1100</td>
-            </tr>
-          </tbody>
-        </table>
-      </body>
-    </html>
 ```
+  url: null                           // remote url to fetch data, also respects the data-url attribute for TABLE
+  items_per_page: [10, 20, 50, 100]   // display items per page
+  sorters: null                       // sort comparison function for custom data types.
+                                      //   1. you can provide a data-type attribute in TH for each column.
+                                      //   2. by default, jquery.tables.js supports string and numeric types.
+                                      //   3. to skip sorting for a column, just add a data-nosort="1" attribute to TH
+  i8n:
+    display: 'Display'
+    first:    'first'
+    previous: 'previous'
+    next:     'next'
+    last:     'last'
+    pageinfo: 'Showing {s} to {e} of {t}'
+    loading:  'LOADING DATA ...'
+    error:    'ERROR LOADING DATA'
+```
+
+## XHR/AJAX requests
+
+XHR/AJAX requests can return either a JSON or HTML response.
+
+
+### JSON
+
+The response needs to have 3 values: total, filtered and rows.
+
+```json
+
+  {total: 92, filtered: 2, rows: [["1", "abby"], ["2", "sam"]]}
+
+```
+
+### HTML
+
+This needs a properly formatted HTML TABLE with the results inside a TBODY element. The total and filtered
+data should be included as attributes for the TABLE.
+
+```html
+  <table data-total="92" data-filtered="2">
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>abby</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>sam</td>
+      </tr>
+    </tbody>
+  </table>
+```
+
+## Demo
+
+```
+bundle --path gems --standalone --binstubs
+./bin/thin -R config.ru start
+```
+and point your browser at http://localhost:3000/
+
+
+## License
+
+[Creative Commons Attribution - CC BY](http://creativecommons.org/licenses/by/3.0)
