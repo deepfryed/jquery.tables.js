@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.jqt-wrapper {
+  margin-left: 20px;
+}
+
+.toolbar {
+  padding: 10px 20px;
+  border-bottom: 1px dotted #000;
+  margin-bottom: 20px;
+  background-color: #eee;
+  font: 14px 'Arial',arial;
+}
+
+.toolbar a {
+  color: #000;
+  font-size: 12px;
+  text-transform: uppercase;
+}
