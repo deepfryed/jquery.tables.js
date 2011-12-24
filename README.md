@@ -3,6 +3,10 @@
 ![The Front End](https://github.com/deepfryed/jquery.tables.js/raw/master/public/art/jquery.tables.png)
 
 
+## Live Demo
+
+[Static HTML demo](http://deepfryed.github.com/jquery.tables.js/)
+
 ## Example
 
 ```html
