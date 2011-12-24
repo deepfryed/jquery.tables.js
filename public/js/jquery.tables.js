@@ -415,7 +415,7 @@ Copyright (C) 2011 Bharanee Rathna
       }
 
       var pagination_index = (instance.pages > 0 ? instance.page + 1 : 0) + ' / ' + instance.pages;
-      input.attr({size: pagination_index.length - 1}).val(pagination_index);
+      input.attr({size: pagination_index.length}).val(pagination_index);
     };
 
     this.filter = function() {
