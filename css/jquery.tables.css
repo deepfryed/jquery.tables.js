@@ -20,7 +20,7 @@
 .jqt-control.top .query   { float: right; }
 .jqt-control.top select   { margin: 0 10px; }
 .jqt-control.top input    {
-  background-image: url(/art/magnifier.png);
+  background-image: url(art/magnifier.png);
   background-position: 3px 3px;
   background-repeat: no-repeat;
   border: 1px solid #aaa;
