@@ -1,5 +1,5 @@
 /*
-Version: 0.2.0
+Version: 0.3.0
 
 Code: https://github.com/deepfryed/jquery.tables
 License: Creative Commons Attribution - CC BY, http://creativecommons.org/licenses/by/3.0
@@ -10,7 +10,7 @@ Copyright (C) 2011 Bharanee Rathna
 (function ($) {
   /** JQueryTables
 
-    A simple table plugin for jquery that supports static html and dynamic content retrieved via
+    A table plugin for jquery that displays data from DOM or dynamic content retrieved via
     xhr requests.
 
     EXAMPLE
@@ -187,10 +187,8 @@ Copyright (C) 2011 Bharanee Rathna
           dir = dir ? dir % 3 + 1 : 2;
 
           // toggle betweeb ascending & descending by default.
-          /*
           if (!e.shiftKey && dir == 1)
             dir = 2;
-          */
 
           $(th).data('sort-dir', dir);
 

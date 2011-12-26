@@ -2,10 +2,20 @@
 
 ![The Front End](https://github.com/deepfryed/jquery.tables.js/raw/master/public/art/jquery.tables.png)
 
+## Demo
 
-## Live Demo
+### DOM based
 
-[Static HTML demo](http://deepfryed.github.com/jquery.tables.js/)
+http://deepfryed.github.com/jquery.tables.js/
+
+### Ruby app
+
+```
+bundle --path gems --standalone --binstubs
+./bin/thin -R config.ru start
+```
+and point your browser at http://localhost:3000/
+
 
 ## Example
 
@@ -81,15 +91,6 @@ data should be included as attributes for the TABLE.
     </tbody>
   </table>
 ```
-
-## Demo
-
-```
-bundle --path gems --standalone --binstubs
-./bin/thin -R config.ru start
-```
-and point your browser at http://localhost:3000/
-
 
 ## License
 
