@@ -90,7 +90,7 @@ Copyright (C) 2011 Bharanee Rathna
     var table    = $(el);
     var instance = this;
     var settings = options || {};
-    var icons    = {0: "ui-icon-carat-2-n-s", 1: "ui-icon-triangle-1-n", 2: "ui-icon-triangle-1-s"};
+    var icons    = {0: "ui-icon-carat-2-n-s", 1: "ui-icon-carat-1-n", 2: "ui-icon-carat-1-s"};
 
     // ordered hash, too bad js doesn't have a built-in.
     var OrderedHash = function() {
@@ -243,8 +243,8 @@ Copyright (C) 2011 Bharanee Rathna
       var input = $('<input/>', {"name": "q"});
 
       input.keydown(function(e) {
-        instance.query = input.val() == '' ? null : input.val();
         if (e.keyCode == 13) {
+          instance.query = input.val() == '' ? null : new RegExp(input.val(), "i");
           instance.page = 0;
           instance.redraw();
         }
@@ -429,8 +429,8 @@ Copyright (C) 2011 Bharanee Rathna
     };
 
     this.floatcmp = function(text1, text2) {
-      var f1 = parseFloat(text1), f2 = parseFloat(text2);
-      return f1 == f2 ? 0 : f1 > f2 ? 1 : -1;
+      var f1 = parseFloat(text1.replace(/[^-+.0-9]+/g, '')), f2 = parseFloat(text2.replace(/[^-+.0-9]+/g, ''));
+      return isNaN(f1) ? 1 : isNaN(f2) ? -1 : f1 == f2 ? 0 : f1 > f2 ? 1 : -1;
     };
 
     this.datecmp = function(text1, text2) {
@@ -447,7 +447,13 @@ Copyright (C) 2011 Bharanee Rathna
         var cmp = 0, hash = instance.ordering, multipliers = {1: 0, 2: 1, 3: -1};
         $.each(hash.keys(), function(idx, f) {
           var dir  = multipliers[hash.find(f)], text1 = instance.getcolumn(tr1, f), text2 = instance.getcolumn(tr2, f);
-          cmp = dir * (settings.sorters[instance.types[f]])(text1, text2);
+
+          // dashes always go last if its a numeric field.
+          if (instance.types[f] == 'numeric')
+            cmp = text1 == '-' ? 1 : text2 == '-' ? -1 : dir * (settings.sorters[instance.types[f]])(text1, text2);
+          else
+            cmp = dir * (settings.sorters[instance.types[f]])(text1, text2);
+
           if (cmp != 0) return false;
         });
 
